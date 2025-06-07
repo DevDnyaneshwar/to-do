@@ -1,10 +1,13 @@
-const API_BASE = 'http://localhost:5000/api';
+// Updated api.js with environment-based API URL
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 export const api = {
   getTodos: async () => {
     try {
       const response = await fetch(`${API_BASE}/todos`);
-      if (!response.ok) throw new Error('Failed to fetch');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       return await response.json();
     } catch (error) {
       console.error('Error fetching todos:', error);
@@ -19,7 +22,9 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(todo)
       });
-      if (!response.ok) throw new Error('Failed to create');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       return await response.json();
     } catch (error) {
       console.error('Error creating todo:', error);
@@ -34,7 +39,9 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(todo)
       });
-      if (!response.ok) throw new Error('Failed to update');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       return await response.json();
     } catch (error) {
       console.error('Error updating todo:', error);
@@ -44,8 +51,12 @@ export const api = {
   
   deleteTodo: async (id) => {
     try {
-      const response = await fetch(`${API_BASE}/todos/${id}`, { method: 'DELETE' });
-      if (!response.ok) throw new Error('Failed to delete');
+      const response = await fetch(`${API_BASE}/todos/${id}`, { 
+        method: 'DELETE' 
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       return true;
     } catch (error) {
       console.error('Error deleting todo:', error);
